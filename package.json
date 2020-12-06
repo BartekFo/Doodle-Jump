@@ -1,0 +1,22 @@
+{
+  "name": "doodle-jump",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BartekFo/Doodle-Jump.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BartekFo/Doodle-Jump/issues"
+  },
+  "homepage": "https://github.com/BartekFo/Doodle-Jump#readme",
+  "devDependencies": {
+    "eslint": "^7.15.0"
+  }
+}
