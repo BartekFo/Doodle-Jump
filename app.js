@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	let isGoingLeft = false;
 	let isGoingRight = false;
 	let leftTimerId;
-	let rightTimerID;
+	let rightTimerId;
+	let score = 0;
 
 	//*Stowrzenie ludzika skaczącego
 	const createDoodler = () => {
@@ -66,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
 				platform.bottom -= 4;
 				let visual = platform.visual;
 				visual.style.bottom = platform.bottom + 'px';
+
+				if (platform.bottom < 10) {
+					let firstPlatform = platforms[0].visual;
+					firstPlatform.classList.remove('platform');
+					platforms.shift();
+					score++;
+					let newPlatform = new Platform(grid.clientHeight);
+					platforms.push(newPlatform);
+				}
 			});
 		}
 	}
@@ -113,31 +123,55 @@ document.addEventListener('DOMContentLoaded', () => {
 	function gameOver() {
 		console.log('gameover');
 		isGameOver = true;
+		while (grid.firstChild) {
+			grid.removeChild(grid.firstChild);
+		}
+		grid.innerHTML = score;
+		grid.appendChild(startBlockInfo);
+		startBlockInfo.hidden = false;
 		clearInterval(upTimerId);
 		clearInterval(downTimerId);
+		clearInterval(leftTimerId);
+		clearInterval(rightTimerId);
 	}
 
 	function control(e) {
-		if (e.key === 'ArrowLeft') {
+		if (e.key === 'ArrowLeft' && !isGoingLeft) {
 			moveLeft();
-		} else if (e.key === 'ArrowRight') {
-			//moveRight
+		} else if (e.key === 'ArrowRight' && !isGoingRight) {
+			moveRight();
 		} else if (e.key === 'ArrowUp') {
 			//moveStraight
 		}
 	}
 
 	function moveLeft() {
+		if (isGoingRight) {
+			clearInterval(rightTimerId);
+			isGoingRight = false;
+		}
 		isGoingLeft = true;
 		leftTimerId = setInterval(() => {
-			if (doodlerLeftSpace >= 0) {
+			if (doodlerLeftSpace > 0) {
 				doodlerLeftSpace -= 5;
 				doodler.style.left = doodlerLeftSpace + 'px';
-			} else moveRight();
-		}, 30);
+			}
+		}, 20);
 	}
 
-	const moveRight = () => {};
+	const moveRight = () => {
+		if (isGoingLeft) {
+			clearInterval(leftTimerId);
+			isGoingLeft = false;
+		}
+		isGoingRight = true;
+		rightTimerId = setInterval(() => {
+			if (doodlerLeftSpace <= 523) {
+				doodlerLeftSpace += 5;
+				doodler.style.left = doodlerLeftSpace + 'px';
+			}
+		}, 20);
+	};
 
 	//* Rozpoczęcie aktulanej gry
 	function start() {

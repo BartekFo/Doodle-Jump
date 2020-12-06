@@ -89,12 +89,16 @@ h4 {
 	);
 	position: relative;
 	box-shadow: 2px 5px 10px 5px rgba(20, 20, 20, 0.719);
+	font-size: 200px;
+	text-align: center;
+	color: var(--clr-green-dark);
 }
 
 .doodler {
 	width: 75px;
 	height: 95px;
-	background-image: url('assets/robot-design.svg');
+	/* background-image: url('assets/robot-design.svg'); */
+	background: url('assets/robot-design.svg');
 	position: absolute;
 }
 
