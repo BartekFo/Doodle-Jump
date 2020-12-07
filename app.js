@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	const HeadLineInfo = document.createElement('h1');
 	const playInfo = document.createElement('article');
 	const scoreDiv = document.createElement('div');
+	const playInfoh1 = document.createElement('h1');
+	const playInfoP = document.createElement('p');
+	const playInfoButtonClose = document.createElement('div');
 
 	//* Ważne zmienne dotyczące całej gry
 	let doodlerLeftSpace = 50;
@@ -37,6 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	//* Pokazanie informacji jak grać
 	function playInfoFun() {
 		playInfo.hidden = false;
+		playInfoh1.innerHTML = 'Jak grać?';
+		playInfo.appendChild(playInfoh1);
+		playInfoP.innerHTML =
+			'Poruszaj się robotem za pomocą strzałek. Wciskajac lewą strzałkę by poruszać się w lewo, prawą by poruszać się w prawo oraz strzałkę w górę by zablokować pozycję i opadać w lini prostej. Po wskoczeniu na platforme robot wybije się sam po raz kolejny! Postraj się zdobyć jak najwięcej punktów i ustanowic nowy rekod!';
+		playInfo.appendChild(playInfoP);
+		playInfoButtonClose.innerHTML = '<i class="fas fa-times"></i>';
+		playInfo.appendChild(playInfoButtonClose);
 	}
 	//*towrzenie klasy która tworzy platformy
 	class Platform {
@@ -47,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			const visual = this.visual;
 			visual.classList.add('platform');
+			visual.style.width = '50px';
 			visual.style.left = this.left + 'px';
 			visual.style.bottom = this.bottom + 'px';
 			grid.appendChild(visual);
@@ -201,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//* Rozpoczęcie aktulanej gry
 	function start() {
+		score = 0;
 		if (!isGameOver) {
 			createPlatforms();
 			createDoodler();
@@ -228,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		playInfo.classList.add('playInfo');
 		playInfo.hidden = true;
 	};
+
 	//*Wywołanie funkcji zaczynjącej grę
 	showInfo();
 	//*Przycisk rozpoczynający grę
@@ -238,4 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	//* Przycisk pokazujący info jak grać
 	buttonInfo.addEventListener('click', playInfoFun);
+
+	playInfoButtonClose.addEventListener('click', () => {
+		playInfo.hidden = true;
+	});
 });

@@ -141,6 +141,40 @@ h4 {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	z-index: 10;
+}
+
+.playInfo h1 {
+	color: var(--clr-green-dark);
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 4rem;
+	font-weight: 700;
+	width: 100%;
+	text-align: center;
+}
+
+.playInfo p {
+	color: var(--clr-green-dark);
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 1.5rem;
+	padding: 0 40px 0;
+	font-weight: 500;
+	width: 100%;
+	text-align: center;
+}
+
+.playInfo i {
+	color: var(--clr-green-dark);
+	position: absolute;
+	top: 2%;
+	right: 5%;
+	font-size: 3rem;
 }
 
 .scoreInfoLook {
