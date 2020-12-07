@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const buttonInfo = document.createElement('button');
 	const HeadLineInfo = document.createElement('h1');
 	const playInfo = document.createElement('article');
+	const scoreDiv = document.createElement('div');
 
 	//* Ważne zmienne dotyczące całej gry
 	let doodlerLeftSpace = 50;
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let isGoingRight = false;
 	let leftTimerId;
 	let rightTimerId;
+	let downPlatformId;
 	let score = 0;
 
 	//*Stowrzenie ludzika skaczącego
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 	//* poruszanie platformą
 	function movePlatforms() {
-		if (doodlerBottomSpace > 200) {
+		if (doodlerBottomSpace > 300) {
 			platforms.forEach((platform) => {
 				platform.bottom -= 4;
 				let visual = platform.visual;
@@ -121,30 +123,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//*funckaj odopowadająca za kontrole czy nasz gracz spadł
 	function gameOver() {
-		console.log('gameover');
 		isGameOver = true;
 		while (grid.firstChild) {
 			grid.removeChild(grid.firstChild);
 		}
-		grid.innerHTML = score;
+		destroyPlatforms();
 		grid.appendChild(startBlockInfo);
+		createScoreInfo();
 		startBlockInfo.hidden = false;
 		clearInterval(upTimerId);
 		clearInterval(downTimerId);
 		clearInterval(leftTimerId);
 		clearInterval(rightTimerId);
 	}
+	//*Funckja pokazujaca punkty na koniec gry
+	const createScoreInfo = () => {
+		scoreDiv.classList.add('scoreInfoLook');
+		scoreDiv.innerHTML = score;
+		startBlockInfo.appendChild(scoreDiv);
+	};
 
+	//*Funckaj odpowiada za kontorlowanie robota
 	function control(e) {
 		if (e.key === 'ArrowLeft' && !isGoingLeft) {
 			moveLeft();
 		} else if (e.key === 'ArrowRight' && !isGoingRight) {
 			moveRight();
 		} else if (e.key === 'ArrowUp') {
-			//moveStraight
+			moveStraight();
 		}
 	}
-
+	//*Fucnkaj odpowiada za ruszanie w lewo
 	function moveLeft() {
 		if (isGoingRight) {
 			clearInterval(rightTimerId);
@@ -158,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}, 20);
 	}
-
+	//*Fucnkaj odpowiada za ruszanie w prawo
 	const moveRight = () => {
 		if (isGoingLeft) {
 			clearInterval(leftTimerId);
@@ -172,13 +181,32 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}, 20);
 	};
+	//*Funkcja odpowiada za ustabilizowania ruchu
+	const moveStraight = () => {
+		clearInterval(leftTimerId);
+		clearInterval(rightTimerId);
+		isGoingLeft = false;
+		isGoingRight = false;
+	};
+	//*Fucnkaj odpowiada za restart wszystkich timerów do ponownego rozpoczęcia gry
+	const destroyPlatforms = () => {
+		platforms = [];
+		clearInterval(upTimerId);
+		clearInterval(downTimerId);
+		clearInterval(downPlatformId);
+		moveStraight();
+		startPoint = 150;
+		doodlerBottomSpace == startPoint;
+	};
 
 	//* Rozpoczęcie aktulanej gry
 	function start() {
 		if (!isGameOver) {
 			createPlatforms();
 			createDoodler();
-			setInterval(movePlatforms, 30);
+			downPlatformId = setInterval(() => {
+				movePlatforms();
+			}, 30);
 			jump();
 			document.addEventListener('keyup', control);
 		}
@@ -204,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	showInfo();
 	//*Przycisk rozpoczynający grę
 	buttonStart.addEventListener('click', () => {
+		isGameOver = false;
 		start();
 		startBlockInfo.hidden = true;
 	});
